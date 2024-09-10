@@ -80,6 +80,7 @@ export default function Login() {
                         username: values.username,
                         password: values.password,
                       });
+                      router.push("/test");
                       localStorage.setItem("token", response.access_token);
                       dispatch(usertoken(response.access_token));
                       toast.success("Login successfuly", {
@@ -88,7 +89,6 @@ export default function Login() {
                         autoClose: 2000,
                       });
                       resetForm();
-                      router.push("/dashboard");
                     } catch (error: any) {
                       toast.error(error?.data?.detail, {
                         hideProgressBar: true,
