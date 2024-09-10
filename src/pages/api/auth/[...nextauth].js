@@ -1,5 +1,6 @@
 import NextAuth from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
+import session from 'redux-persist/lib/storage/session';
 
 export default NextAuth({
   providers: [
@@ -40,5 +41,26 @@ export default NextAuth({
   pages: {
     signIn: '/auth/signin',
   },
-  secret:process.env.NEXTAUTH_SECRET 
+  secret:process.env.NEXTAUTH_SECRET,
+  session:{
+    jwt:true
+  },
+  callbacks:{
+   async jwt({token,user}) {
+    console.log("user",user)
+    console.log("token",token)
+    if(user){
+      token.access_token=user.token
+    }
+    return token
+   },
+   async session({session,token}) {
+    console.log("session token",token)
+
+    session.accessToken=token.access_token
+    console.log("session",session)
+
+    return session
+   }
+  } 
 });
