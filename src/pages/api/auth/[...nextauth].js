@@ -1,6 +1,5 @@
 import NextAuth from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
-import session from 'redux-persist/lib/storage/session';
 
 export default NextAuth({
   providers: [
@@ -11,7 +10,6 @@ export default NextAuth({
         password: { label: "Password", type: "password" }
       },
       async authorize(credentials) {
-        console.log('credentials', credentials);
         const formdata = new FormData();
         formdata.append("username", credentials.username);
         formdata.append("password", credentials.password);
@@ -22,11 +20,9 @@ export default NextAuth({
           });
 
           const user = await res.json();
-          console.log("API Response:", user);
-
           // Return the user object if the request was successful
           if (res.ok && user?.access_token) {
-            return { token: user.access_token }; 
+            return user; 
            }
 
           // Return null if the credentials are invalid
@@ -46,21 +42,12 @@ export default NextAuth({
     jwt:true
   },
   callbacks:{
-   async jwt({token,user}) {
-    console.log("user",user)
-    console.log("token",token)
-    if(user){
-      token.access_token=user.token
+    async jwt({token,user}) {
+      if(user){
+        token.accessToken=user.access_token
+      }
+      return token
     }
-    return token
-   },
-   async session({session,token}) {
-    console.log("session token",token)
-
-    session.accessToken=token.access_token
-    console.log("session",session)
-
-    return session
-   }
-  } 
+  }
+ 
 });
