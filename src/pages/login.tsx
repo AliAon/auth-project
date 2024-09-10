@@ -75,11 +75,11 @@ export default function Login() {
                     formdata.append("password", values.password);
                     try {
                       const response = await LoginUser(formdata).unwrap();
-                      // const result = await signIn("credentials", {
-                      //   redirect: false,
-                      //   username: values.username,
-                      //   password: values.password,
-                      // });
+                      const result = await signIn("credentials", {
+                        redirect: false,
+                        username: values.username,
+                        password: values.password,
+                      });
                       localStorage.setItem("token", response.access_token);
                       dispatch(usertoken(response.access_token));
                       toast.success("Login successfuly", {
