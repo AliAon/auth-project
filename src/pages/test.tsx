@@ -9,6 +9,7 @@ export default function Test() {
 }
 export async function getServerSideProps(context:any) {
     const session = await getSession(context);
+
     console.log("NEXTAUTH_SECRET:", process.env.NEXTAUTH_SECRET);
     console.log("session",session)
   
@@ -25,4 +26,3 @@ export async function getServerSideProps(context:any) {
       props: { session },
     };
   }
-  
