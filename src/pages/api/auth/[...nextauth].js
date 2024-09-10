@@ -10,6 +10,7 @@ export default NextAuth({
         password: { label: "Password", type: "password" }
       },
       async authorize(credentials) {
+        console.log('credentials', credentials);
         const formdata = new FormData();
         formdata.append("username", credentials.username);
         formdata.append("password", credentials.password);
@@ -37,17 +38,26 @@ export default NextAuth({
   pages: {
     signIn: '/auth/signin',
   },
-  secret:process.env.NEXTAUTH_SECRET,
   session:{
     jwt:true
   },
   callbacks:{
-    async jwt({token,user}) {
+    async jwt({ token, user }) {
       if(user){
         token.accessToken=user.access_token
       }
-      return token
+      return token 
+    },
+    async session({ session, token, user }) {
+
+      session.accessToken=token.accessToken
+      session.user.id = token.accessToken
+      return session
     }
   }
+
+
+
+  
  
 });

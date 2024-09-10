@@ -11,8 +11,7 @@ export async function getServerSideProps(context:any) {
     const session = await getSession(context);
     const token:any=await getToken(context)
     const isToken=token?.accessToken
-    console.log("token",token)  
-    console.log("session",session)  
+  
 
     if (!isToken) {
       return {
