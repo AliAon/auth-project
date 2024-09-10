@@ -18,6 +18,7 @@ import { getSession } from "next-auth/react";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { fetchHost, fetchNomad, fetchUserType } from "@/lib/features/authAction";
+import { getToken } from "next-auth/jwt";
 const inter = Inter({ subsets: ["latin"] });
 
 
@@ -159,5 +160,25 @@ export default function Home() {
       </div>
     </main>
   );
+}
+export async function getServerSideProps(context:any) {
+  const session = await getSession(context);
+  const token:any=await getToken(context)
+  const isToken=token?.accessToken
+  console.log("token",token)  
+  console.log("session",session)  
+
+  if (!isToken) {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: { session },
+  };
 }
 
